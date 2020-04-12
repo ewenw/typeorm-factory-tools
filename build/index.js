@@ -40,6 +40,16 @@ var transactionalTestContext_1 = require("./transactionalTestContext");
 var factory_1 = require("./factory");
 var connection;
 var contextFunction;
+var defaultsFunction;
+/**
+ * Sets the default artifacts to create for every test case that uses transact() or start().
+ *
+ * @returns void
+ */
+function setDefaults(func) {
+    defaultsFunction = func;
+}
+exports.setDefaults = setDefaults;
 /**
  * Execute the function in a transaction and roll back afterwards.
  *
@@ -82,11 +92,12 @@ exports.transact = transact;
  * @export
  * @returns {Promise<Connection>}
  */
-function setConnection(connection) {
+function setConnection(conn) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
-            factory_1.factory.setManager(connection.manager);
-            transactionalTestContext_1.testContext.setConnection(connection);
+            connection = conn;
+            factory_1.factory.setManager(conn.manager);
+            transactionalTestContext_1.testContext.setConnection(conn);
             return [2 /*return*/];
         });
     });
@@ -125,12 +136,18 @@ function start() {
                 case 0: return [4 /*yield*/, transactionalTestContext_1.testContext.start()];
                 case 1:
                     _a.sent();
-                    if (!(contextFunction !== undefined)) return [3 /*break*/, 3];
-                    return [4 /*yield*/, contextFunction()];
+                    if (!(defaultsFunction !== undefined)) return [3 /*break*/, 3];
+                    return [4 /*yield*/, defaultsFunction()];
                 case 2:
                     _a.sent();
                     _a.label = 3;
-                case 3: return [2 /*return*/];
+                case 3:
+                    if (!(contextFunction !== undefined)) return [3 /*break*/, 5];
+                    return [4 /*yield*/, contextFunction()];
+                case 4:
+                    _a.sent();
+                    _a.label = 5;
+                case 5: return [2 /*return*/];
             }
         });
     });

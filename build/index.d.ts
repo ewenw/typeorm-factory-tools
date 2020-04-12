@@ -1,6 +1,12 @@
 import { EntityManager } from 'typeorm';
 import { FactoryProps } from './factory';
 /**
+ * Sets the default artifacts to create for every test case that uses transact() or start().
+ *
+ * @returns void
+ */
+export declare function setDefaults(func: any): void;
+/**
  * Execute the function in a transaction and roll back afterwards.
  *
  * @export
@@ -14,7 +20,7 @@ export declare function transact(func: () => Promise<void>): (any: any) => Promi
  * @export
  * @returns {Promise<Connection>}
  */
-export declare function setConnection(connection: any): Promise<void>;
+export declare function setConnection(conn: any): Promise<void>;
 /**
  * Disconnect from PG.
  *

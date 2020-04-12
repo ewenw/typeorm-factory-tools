@@ -4,6 +4,16 @@ import { FactoryProps, factory } from './factory';
 
 let connection;
 let contextFunction;
+let defaultsFunction;
+
+/**
+ * Sets the default artifacts to create for every test case that uses transact() or start().
+ *
+ * @returns void
+ */
+export function setDefaults(func): void {
+  defaultsFunction = func;
+}
 
 /**
  * Execute the function in a transaction and roll back afterwards.
@@ -31,9 +41,10 @@ export function transact(func: () => Promise<void>): (any) => Promise<void> {
  * @export
  * @returns {Promise<Connection>}
  */
-export async function setConnection(connection): Promise<void> {
-  factory.setManager(connection.manager);
-  testContext.setConnection(connection);
+export async function setConnection(conn): Promise<void> {
+  connection = conn;
+  factory.setManager(conn.manager);
+  testContext.setConnection(conn);
 }
 
 /**
@@ -55,6 +66,9 @@ export async function disconnect(): Promise<void> {
  */
 export async function start(): Promise<void> {
   await testContext.start();
+  if (defaultsFunction !== undefined) {
+    await defaultsFunction();
+  }
   if (contextFunction !== undefined) {
     await contextFunction();
   }
