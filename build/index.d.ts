@@ -1,10 +1,5 @@
 import { EntityManager } from 'typeorm';
-import { testContext } from './transactionalTestContext';
-import { FactoryProps, factory } from './factory';
-
-let connection;
-let contextFunction;
-
+import { FactoryProps } from './factory';
 /**
  * Execute the function in a transaction and roll back afterwards.
  *
@@ -12,63 +7,35 @@ let contextFunction;
  * @param {() => Promise<void>} func
  * @returns {() => Promise<void>}
  */
-export function transact(func: () => Promise<void>): (any) => Promise<void> {
-  return async (done): Promise<void> => {
-    try {
-      await start();
-      await func();
-    } catch (e) {
-      done(e);
-    }
-    await finish();
-    done();
-  };
-}
-
+export declare function transact(func: () => Promise<void>): (any: any) => Promise<void>;
 /**
  * Connect to the PG database and provide connection object to factories and the transaction context.
  *
  * @export
  * @returns {Promise<Connection>}
  */
-export async function setConnection(connection): Promise<void> {
-  factory.setManager(connection.manager);
-  testContext.setConnection(connection);
-}
-
+export declare function setConnection(connection: any): Promise<void>;
 /**
  * Disconnect from PG.
  *
  * @export
  * @returns {Promise<void>}
  */
-export async function disconnect(): Promise<void> {
-  await connection.close();
-  contextFunction = undefined;
-}
-
+export declare function disconnect(): Promise<void>;
 /**
  * Start a transaction.
  *
  * @export
  * @returns {Promise<void>}
  */
-export async function start(): Promise<void> {
-  await testContext.start();
-  if (contextFunction !== undefined) {
-    await contextFunction();
-  }
-}
+export declare function start(): Promise<void>;
 /**
  * Rollback the current test transaction.
  *
  * @export
  * @returns {Promise<void>}
  */
-export async function finish(): Promise<void> {
-  await testContext.finish();
-}
-
+export declare function finish(): Promise<void>;
 /**
  * Define a factory with default properties.
  *
@@ -84,14 +51,9 @@ export async function finish(): Promise<void> {
  * @param {FactoryProps} [props={}]
  * @param {string} [variant=null] the variation of the entity to define
  */
-export function define<T>(
-  Entity: { new(): T },
-  props: FactoryProps = {},
-  variant: string = null,
-): void {
-  factory.define(Entity, props, variant);
-}
-
+export declare function define<T>(Entity: {
+    new (): T;
+}, props?: FactoryProps, variant?: string): void;
 /**
  * Makes an artifact from the given factory.
  *
@@ -103,16 +65,9 @@ export function define<T>(
  * @param managerOverride {EntityManager} use this connection manager instead of the default
  * @returns {Promise<T>}
  */
-export async function make<T>(
-  entityOrName: { new(): T } | string,
-  props: FactoryProps = {},
-  variant: string = null,
-  managerOverride?: EntityManager,
-): Promise<T> {
-  const artifact = await factory.make(entityOrName, props, variant, managerOverride);
-  return artifact;
-}
-
+export declare function make<T>(entityOrName: {
+    new (): T;
+} | string, props?: FactoryProps, variant?: string, managerOverride?: EntityManager): Promise<T>;
 /**
  * Make N number of artifacts from the given factory.
  *
@@ -124,19 +79,9 @@ export async function make<T>(
  * @param {string} [variant=null]
  * @returns {Promise<T[]>}
  */
-export async function makeMany<T>(
-  entityOrName: { new(): T } | string,
-  n: number,
-  props: FactoryProps = {},
-  variant: string = null,
-): Promise<T[]> {
-  return Promise.all(
-    Array<number>(n)
-      .fill(n)
-      .map(() => make(entityOrName, props, variant)),
-  );
-}
-
+export declare function makeMany<T>(entityOrName: {
+    new (): T;
+} | string, n: number, props?: FactoryProps, variant?: string): Promise<T[]>;
 /**
  * Context to be executed inside each transact() call. Useful for defining artifacts that needs to be created
  * before each test case and rolled back after each case.
@@ -144,15 +89,7 @@ export async function makeMany<T>(
  * @export
  * @param {() => void} func the function to execute in the transaction
  */
-export function context(func: () => void): void {
-  contextFunction = func;
-}
-
-export async function relate<T>(
-  Entity: { new(): T },
-  relationName: string,
-  instance: T,
-  relative: T,
-): Promise<void> {
-  await factory.relate(Entity, relationName, instance, relative);
-}
+export declare function context(func: () => void): void;
+export declare function relate<T>(Entity: {
+    new (): T;
+}, relationName: string, instance: T, relative: T): Promise<void>;
