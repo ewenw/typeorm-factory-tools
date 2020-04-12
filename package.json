@@ -1,0 +1,16 @@
+{
+  "name": "typeorm-factory-tools",
+  "version": "0.1.0",
+  "description": "Write fuss-free transactional tests for your TypeOrm entities",
+  "main": "index.ts",
+  "scripts": {
+    "test": "npm run test"
+  },
+  "author": "Ewen Wang",
+  "license": "ISC",
+  "dependencies": {
+    "faker": "^4.1.0",
+    "lodash": "^4.17.15",
+    "typeorm": "^0.2.24"
+  }
+}
