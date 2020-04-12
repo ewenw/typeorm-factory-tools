@@ -1,7 +1,7 @@
-`typeorm-factory-tools` is a factory library for `typeorm` that
-supports writing clean, transactional tests.
+`typeorm-factory-tools` is a factory package for `typeorm` that
+helps your team write clean, transactional tests.
 
-Inspired by the `factory-bot` gem.
+It is inspired by the `factory-bot` gem and uses viniciusjssouza's [typeorm-transactional-tests](https://github.com/viniciusjssouza/typeorm-transactional-tests) code to monkeypatch typeorm for transaction handling.
 
 ### Installation
 ```
@@ -15,12 +15,24 @@ npm install --save-dev typeorm-factory-tools
 - Wrap up test cases in a transaction context to prevent disk-writes and enable fast tests
 - Create common instances used in multiple cases
 
-### Documentation
+### Overview
 
-This package provides a set of core functions that makes it easy to define factories, create instances, and wrap everything in tests that run in transactions:
+This package provides a set of core functions that makes it easy to define factories, create instances, and wrap tests in transactions:
 - `define` - defines factories with default properties
 - `relate` - creates many-to-many relationships between instances
 - `make` - makes an instance of a factory
 - `makeMany` - makes multiple instances of a factory
 - `transact` - runs the test function in a single transaction by overriding typeorm's `connection` object
 - `context` - creates common instances for each test case that uses `transact`
+
+### Usage
+Below is an example of how you could structure your project to integrate this package.
+```
+/tests
+
+```
+
+`entityFactories.ts`
+```
+
+```

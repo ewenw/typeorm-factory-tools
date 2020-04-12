@@ -1,8 +1,8 @@
 {
   "name": "typeorm-factory-tools",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Write fuss-free transactional tests for your TypeOrm entities",
-  "main": "index.ts",
+  "main": "src/index.ts",
   "scripts": {
     "test": "npm run test"
   },
