@@ -75,7 +75,7 @@ export class Factory {
     if (variant !== null) {
       name = this.factoryWithVariantName(name, variant);
     }
-    const overrideProps = { ...{ id: faker.random.uuid(), transactionId: 'test-transaction-id' }, ...props };
+    const overrideProps = { ...{ id: faker.random.uuid(), }, ...props };
     const factory = this.factories[name];
 
     if (factory === undefined) {

@@ -1,4 +1,4 @@
-import { EntityManager } from 'typeorm';
+import { EntityManager, Connection } from 'typeorm';
 import { FactoryProps } from './factory';
 /**
  * Sets the default artifacts to create for every test case that uses transact() or start().
@@ -20,7 +20,7 @@ export declare function transact(func: () => Promise<void>): (any: any) => Promi
  * @export
  * @returns {Promise<Connection>}
  */
-export declare function setConnection(conn: any): Promise<void>;
+export declare function setConnection(conn: any): Promise<Connection>;
 /**
  * Disconnect from PG.
  *
@@ -96,6 +96,13 @@ export declare function makeMany<T>(entityOrName: {
  * @param {() => void} func the function to execute in the transaction
  */
 export declare function context(func: () => void): void;
+/**
+ * Adds a relationship between instance and relative. Relative could be multiple instances.
+ * @param Entity
+ * @param relationName
+ * @param instance
+ * @param relative
+ */
 export declare function relate<T>(Entity: {
     new (): T;
-}, relationName: string, instance: T, relative: T): Promise<void>;
+}, relationName: string, instance: T, relative: T | T[]): Promise<void>;

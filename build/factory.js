@@ -118,7 +118,7 @@ var Factory = /** @class */ (function () {
                         if (variant !== null) {
                             name = this.factoryWithVariantName(name, variant);
                         }
-                        overrideProps = __assign({ id: faker.random.uuid(), transactionId: 'test-transaction-id' }, props);
+                        overrideProps = __assign({ id: faker.random.uuid(), }, props);
                         factory = this.factories[name];
                         if (factory === undefined) {
                             throw "Factory \"" + name + "\" does not exist";

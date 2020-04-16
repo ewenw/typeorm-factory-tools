@@ -1,4 +1,4 @@
-import { EntityManager } from 'typeorm';
+import { EntityManager, Connection } from 'typeorm';
 import { testContext } from './transactionalTestContext';
 import { FactoryProps, factory } from './factory';
 
@@ -41,10 +41,11 @@ export function transact(func: () => Promise<void>): (any) => Promise<void> {
  * @export
  * @returns {Promise<Connection>}
  */
-export async function setConnection(conn): Promise<void> {
+export function setConnection(conn): Promise<Connection> {
   connection = conn;
   factory.setManager(conn.manager);
   testContext.setConnection(conn);
+  return conn;
 }
 
 /**
@@ -162,11 +163,23 @@ export function context(func: () => void): void {
   contextFunction = func;
 }
 
+/**
+ * Adds a relationship between instance and relative. Relative could be multiple instances.
+ * @param Entity 
+ * @param relationName 
+ * @param instance 
+ * @param relative 
+ */
 export async function relate<T>(
   Entity: { new(): T },
   relationName: string,
   instance: T,
-  relative: T,
+  relative: T | T[],
 ): Promise<void> {
-  await factory.relate(Entity, relationName, instance, relative);
+  if (Array.isArray(relative)) {
+    await Promise.all(relative.map(async (r) => await factory.relate(Entity, relationName, instance, r)));
+  }
+  else {
+    await factory.relate(Entity, relationName, instance, relative);
+  }
 }

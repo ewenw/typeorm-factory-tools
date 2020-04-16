@@ -93,14 +93,10 @@ exports.transact = transact;
  * @returns {Promise<Connection>}
  */
 function setConnection(conn) {
-    return __awaiter(this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            connection = conn;
-            factory_1.factory.setManager(conn.manager);
-            transactionalTestContext_1.testContext.setConnection(conn);
-            return [2 /*return*/];
-        });
-    });
+    connection = conn;
+    factory_1.factory.setManager(conn.manager);
+    transactionalTestContext_1.testContext.setConnection(conn);
+    return conn;
 }
 exports.setConnection = setConnection;
 /**
@@ -254,14 +250,34 @@ function context(func) {
     contextFunction = func;
 }
 exports.context = context;
+/**
+ * Adds a relationship between instance and relative. Relative could be multiple instances.
+ * @param Entity
+ * @param relationName
+ * @param instance
+ * @param relative
+ */
 function relate(Entity, relationName, instance, relative) {
     return __awaiter(this, void 0, void 0, function () {
+        var _this = this;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, factory_1.factory.relate(Entity, relationName, instance, relative)];
+                case 0:
+                    if (!Array.isArray(relative)) return [3 /*break*/, 2];
+                    return [4 /*yield*/, Promise.all(relative.map(function (r) { return __awaiter(_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4 /*yield*/, factory_1.factory.relate(Entity, relationName, instance, r)];
+                                case 1: return [2 /*return*/, _a.sent()];
+                            }
+                        }); }); }))];
                 case 1:
                     _a.sent();
-                    return [2 /*return*/];
+                    return [3 /*break*/, 4];
+                case 2: return [4 /*yield*/, factory_1.factory.relate(Entity, relationName, instance, relative)];
+                case 3:
+                    _a.sent();
+                    _a.label = 4;
+                case 4: return [2 /*return*/];
             }
         });
     });
