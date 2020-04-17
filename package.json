@@ -1,10 +1,13 @@
 {
   "name": "typeorm-factory-tools",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Write fuss-free transactional tests for your TypeOrm entities",
   "main": "build/index.js",
   "types": "build/index.d.ts",
-  "url": "https://github.com/ewenw/typeorm-factory-tools",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ewenw/typeorm-factory-tools"
+  },
   "scripts": {
     "test": "docker exec -i pg-docker dropdb test -U cluser; docker exec -i pg-docker createdb test -U cluser; NODE_ENV=testing jest --runInBand;",
     "build": "tsc"
