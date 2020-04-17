@@ -208,7 +208,7 @@ describe('test factory', async () => {
         const [retrievedUser] = await getRepo(User).findByIds([newUser.id], { relations: ['tags'] });
         expect(retrievedUser.tags).toEqual(expect.arrayContaining([tag1]));
     }));
-    
+
     it('creates the instances inside setDefaults() in factories.ts', transact(async () => {
         expect((await getRepo(User).findAndCount())[1]).toEqual(1);
     }));
@@ -220,3 +220,6 @@ describe('test factory', async () => {
     }));
 });
 ```
+
+This package was developed by Ewen and the Certain Lending team.
+https://www.certainlending.com/
