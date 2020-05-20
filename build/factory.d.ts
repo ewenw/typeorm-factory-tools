@@ -23,15 +23,15 @@ export declare class Factory {
     setManager(manager: EntityManager): void;
     has(name: string): boolean;
     clear(): void;
-    factoryWithVariantName(name: string, variant: string): string;
+    private factoryWithVariantName;
     define<T>(Entity: {
         new (): T;
     }, props?: FactoryProps, variant?: string): void;
-    evaluate<T>(props: FactoryProps, context: {}): Promise<T>;
+    private evaluate;
     make<T>(entityOrName: {
         new (): T;
     } | string, props?: FactoryProps, variant?: string, managerOverride?: EntityManager): Promise<T>;
-    parse(val: FactoryAttribute, context: {}): Promise<FactoryAttribute>;
+    private parse;
     relate<T>(Entity: {
         new (): T;
     }, relationName: string, instance: T, relative: T): Promise<void>;

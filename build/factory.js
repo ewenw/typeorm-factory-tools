@@ -48,7 +48,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var lodash_1 = require("lodash");
-var faker = require("faker");
 /**
  * Loosely inspired by the factory-bot npm package. Customized to add support for persisting objects
  * to TypeOrm, adding entity relationships, factory variations, and contexts.
@@ -103,7 +102,7 @@ var Factory = /** @class */ (function () {
         if (props === void 0) { props = {}; }
         if (variant === void 0) { variant = null; }
         return __awaiter(this, void 0, void 0, function () {
-            var defaultManager, name, overrideProps, factory, finalProps, context, afterSave, instance;
+            var defaultManager, name, factory, finalProps, context, afterSave, instance;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -118,12 +117,11 @@ var Factory = /** @class */ (function () {
                         if (variant !== null) {
                             name = this.factoryWithVariantName(name, variant);
                         }
-                        overrideProps = __assign({ id: faker.random.uuid(), }, props);
                         factory = this.factories[name];
                         if (factory === undefined) {
-                            throw "Factory \"" + name + "\" does not exist";
+                            throw "Factory \"" + name + "\" does not exist. Please define() it first.";
                         }
-                        finalProps = __assign(__assign({}, factory.props), overrideProps);
+                        finalProps = __assign(__assign({}, factory.props), props);
                         context = {};
                         if (!('context' in finalProps)) return [3 /*break*/, 2];
                         return [4 /*yield*/, this.evaluate(finalProps.context, {})];

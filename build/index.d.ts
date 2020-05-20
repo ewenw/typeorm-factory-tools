@@ -95,7 +95,7 @@ export declare function makeMany<T>(entityOrName: {
  * @export
  * @param {() => void} func the function to execute in the transaction
  */
-export declare function context(func: () => void): void;
+export declare function context(func: () => void | Promise<void>): void;
 /**
  * Adds a relationship between instance and relative. Relative could be multiple instances.
  * @param Entity

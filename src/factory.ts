@@ -1,5 +1,4 @@
 import { isFunction } from 'lodash';
-import * as faker from 'faker';
 import { EntityManager } from 'typeorm';
 
 export type FactoryAttribute = string | number | boolean | Date | Function | Record<string, any> | any;
@@ -27,28 +26,28 @@ export class Factory {
   private factories: {} = new Map<string, FactoryEntry>();
   private manager: EntityManager;
 
-  setManager(manager: EntityManager): void {
+  public setManager(manager: EntityManager): void {
     this.manager = manager;
   }
 
-  has(name: string): boolean {
+  public has(name: string): boolean {
     return this.factories[name] !== undefined;
   }
 
-  clear(): void {
+  public clear(): void {
     this.factories = new Map<string, FactoryEntry>();
   }
 
-  factoryWithVariantName(name: string, variant: string): string {
+  private factoryWithVariantName(name: string, variant: string): string {
     return `${name}.${variant}`;
   }
 
-  define<T>(Entity: { new(): T }, props: FactoryProps = {}, variant: string = null): void {
+  public define<T>(Entity: { new(): T }, props: FactoryProps = {}, variant: string = null): void {
     const name = variant === null ? Entity.name : this.factoryWithVariantName(Entity.name, variant);
     this.factories[name] = { props, Entity };
   }
 
-  async evaluate<T>(props: FactoryProps, context: {}): Promise<T> {
+  private async evaluate<T>(props: FactoryProps, context: {}): Promise<T> {
     const results = {};
     const values = await Promise.all(Object.keys(props).map(async prop => this.parse(props[prop], context)));
 
@@ -58,7 +57,7 @@ export class Factory {
     return results as T;
   }
 
-  async make<T>(
+  public async make<T>(
     entityOrName: { new(): T } | string,
     props: FactoryProps = {},
     variant: string = null,
@@ -75,14 +74,13 @@ export class Factory {
     if (variant !== null) {
       name = this.factoryWithVariantName(name, variant);
     }
-    const overrideProps = { ...{ id: faker.random.uuid(), }, ...props };
     const factory = this.factories[name];
 
     if (factory === undefined) {
-      throw `Factory "${name}" does not exist`;
+      throw `Factory "${name}" does not exist. Please define() it first.`;
     }
 
-    const finalProps: FactoryProps = { ...factory.props, ...overrideProps };
+    const finalProps: FactoryProps = { ...factory.props, ...props };
 
     let context = {};
 
@@ -111,12 +109,12 @@ export class Factory {
     return instance as T;
   }
 
-  async parse(val: FactoryAttribute, context: {}): Promise<FactoryAttribute> {
+  private async parse(val: FactoryAttribute, context: {}): Promise<FactoryAttribute> {
     const value = isFunction(val) ? await val(context) : val;
     return value;
   }
 
-  async relate<T>(Entity: { new(): T }, relationName: string, instance: T, relative: T): Promise<void> {
+  public async relate<T>(Entity: { new(): T }, relationName: string, instance: T, relative: T): Promise<void> {
     await this.manager
       .createQueryBuilder()
       .relation(Entity, relationName)

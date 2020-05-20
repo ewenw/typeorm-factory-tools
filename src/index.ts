@@ -159,7 +159,7 @@ export async function makeMany<T>(
  * @export
  * @param {() => void} func the function to execute in the transaction
  */
-export function context(func: () => void): void {
+export function context(func: () => void | Promise<void>): void {
   contextFunction = func;
 }
 
